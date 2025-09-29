@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { adminQueries } from '@/lib/queries'
-import { comparePassword } from '@/app/lib/encryption'
+import bcrypt from 'bcryptjs'
 import { AdminSession } from '@/lib/admin-session'
 
 // POST /api/admin/auth - Admin login
@@ -26,7 +26,7 @@ export async function POST(request) {
     }
 
     // Verify password
-    const isPasswordValid = comparePassword(password, admin.password)
+    const isPasswordValid = await bcrypt.compare(password, admin.password)
 
     if (!isPasswordValid) {
       return NextResponse.json(

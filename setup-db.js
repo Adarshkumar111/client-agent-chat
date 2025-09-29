@@ -3,10 +3,13 @@ import pkg from 'pg';
 const { Client } = pkg;
 
 // Replace with your Neon connection string
-const connectionString = process.env.DATABASE_URL;
+const connectionString = process.env.DATABASE_URL || "postgresql://neondb_owner:npg_pXe5SEH6nqkT@ep-lucky-moon-adxll4tl-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require";
 
 const client = new Client({
   connectionString,
+  ssl: {
+    rejectUnauthorized: false, // Required for Neon
+  },
 });
 
 const schema = `
@@ -67,7 +70,7 @@ CREATE TABLE IF NOT EXISTS private_notes (
 );
 
 -- Admin table
-CREATE TABLE IF NOT EXISTS admin (
+CREATE TABLE IF NOT EXISTS admins (
     id SERIAL PRIMARY KEY,
     username VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
@@ -86,7 +89,7 @@ CREATE INDEX IF NOT EXISTS idx_group_members_user ON group_members(user_id);
 CREATE INDEX IF NOT EXISTS idx_group_members_group ON group_members(group_id);
 CREATE INDEX IF NOT EXISTS idx_private_notes_author ON private_notes(author_id);
 CREATE INDEX IF NOT EXISTS idx_private_notes_related_user ON private_notes(related_user_id);
-CREATE INDEX IF NOT EXISTS idx_admin_username ON admin(username);
+CREATE INDEX IF NOT EXISTS idx_admins_username ON admins(username);
 
 -- Function for auto-updated updated_at
 CREATE OR REPLACE FUNCTION update_updated_at_column()
@@ -110,7 +113,7 @@ CREATE TRIGGER update_messages_updated_at BEFORE UPDATE ON messages
 CREATE TRIGGER update_private_notes_updated_at BEFORE UPDATE ON private_notes
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
-CREATE TRIGGER update_admin_updated_at BEFORE UPDATE ON admin
+CREATE TRIGGER update_admin_updated_at BEFORE UPDATE ON admins
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 `;
 
