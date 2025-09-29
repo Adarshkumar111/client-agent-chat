@@ -14,8 +14,8 @@ async function verifyAdminSession(request) {
 // GET /api/admin/dashboard - Get dashboard statistics
 export async function GET(request) {
   try {
-    // Verify admin authentication
-    await verifyAdminSession(request)
+    // Authentication removed - direct access allowed
+    // await verifyAdminSession(request)
 
     // Get dashboard statistics
     const stats = await adminQueries.getDashboardStats()
@@ -23,13 +23,6 @@ export async function GET(request) {
     return NextResponse.json(stats)
 
   } catch (error) {
-    if (error.message === 'Unauthorized') {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
-    }
-
     console.error('Dashboard stats error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },

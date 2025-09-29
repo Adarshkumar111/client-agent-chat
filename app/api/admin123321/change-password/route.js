@@ -5,8 +5,8 @@ import { AdminSession } from '@/lib/admin-session'
 
 export async function POST(request) {
   try {
-    // Verify admin session
-    const adminSession = await AdminSession.verify(request)
+    // Authentication removed - direct access allowed
+    // const adminSession = await AdminSession.verify(request)
 
     const { currentPassword, newPassword } = await request.json()
 
@@ -25,8 +25,8 @@ export async function POST(request) {
       )
     }
 
-    // Get current admin user
-    const adminUser = await adminQueries.findById(adminSession.id)
+    // Get current admin user (assuming username 'admin' since no session)
+    const adminUser = await adminQueries.findByUsername('admin')
     if (!adminUser) {
       return NextResponse.json(
         { error: 'Admin user not found' },
@@ -63,13 +63,6 @@ export async function POST(request) {
     })
 
   } catch (error) {
-    if (error.message === 'Unauthorized') {
-      return NextResponse.json(
-        { error: 'Unauthorized - Invalid admin session' },
-        { status: 401 }
-      )
-    }
-
     console.error('Change password error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },

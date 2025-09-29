@@ -14,8 +14,8 @@ async function verifyAdminSession(request) {
 // GET /api/admin/users - Get all users with filtering and pagination
 export async function GET(request) {
   try {
-    // Verify admin authentication
-    await verifyAdminSession(request)
+    // Authentication removed - direct access allowed
+    // await verifyAdminSession(request)
 
     const url = new URL(request.url)
     const page = parseInt(url.searchParams.get('page') || '1')
@@ -36,13 +36,6 @@ export async function GET(request) {
     })
 
   } catch (error) {
-    if (error.message === 'Unauthorized') {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
-    }
-
     console.error('Get users error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
@@ -54,8 +47,8 @@ export async function GET(request) {
 // PATCH /api/admin/users - Update user status (approve/reject agents)
 export async function PATCH(request) {
   try {
-    // Verify admin authentication
-    await verifyAdminSession(request)
+    // Authentication removed - direct access allowed
+    // await verifyAdminSession(request)
 
     const { userId, isActive } = await request.json()
 
@@ -82,13 +75,6 @@ export async function PATCH(request) {
     })
 
   } catch (error) {
-    if (error.message === 'Unauthorized') {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
-    }
-
     console.error('Update user status error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
@@ -100,8 +86,8 @@ export async function PATCH(request) {
 // DELETE /api/admin/users - Delete a user
 export async function DELETE(request) {
   try {
-    // Verify admin authentication
-    await verifyAdminSession(request)
+    // Authentication removed - direct access allowed
+    // await verifyAdminSession(request)
 
     const { userId } = await request.json()
 
@@ -129,13 +115,6 @@ export async function DELETE(request) {
     })
 
   } catch (error) {
-    if (error.message === 'Unauthorized') {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
-    }
-
     console.error('Delete user error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },

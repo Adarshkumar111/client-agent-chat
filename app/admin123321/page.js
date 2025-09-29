@@ -10,7 +10,6 @@ import {
   CheckCircleIcon,
   XCircleIcon,
   ClockIcon,
-  ArrowRightOnRectangleIcon,
   KeyIcon,
   EyeIcon,
   EyeSlashIcon,
@@ -39,20 +38,8 @@ export default function AdminDashboard() {
   const [deleteConfirmModal, setDeleteConfirmModal] = useState(null)
   const router = useRouter()
 
-  // Check admin authentication and fetch data
+  // Fetch admin data without authentication
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const response = await fetch('/api/admin/auth')
-        if (!response.ok) {
-          router.push('/admin/login')
-          return
-        }
-      } catch (error) {
-        router.push('/admin/login')
-      }
-    }
-
     const fetchDashboardData = async () => {
       try {
         const [statsResponse, agentsResponse, usersResponse] = await Promise.all([
@@ -83,21 +70,8 @@ export default function AdminDashboard() {
       }
     }
 
-    checkAuth()
     fetchDashboardData()
-  }, [router])
-
-  const checkAuth = async () => {
-    try {
-      const response = await fetch('/api/admin/auth')
-      if (!response.ok) {
-        router.push('/admin/login')
-        return
-      }
-    } catch (error) {
-      router.push('/admin/login')
-    }
-  }
+  }, [])
 
   const fetchDashboardData = async () => {
     try {
@@ -155,14 +129,15 @@ export default function AdminDashboard() {
     }
   }
 
-  const handleLogout = async () => {
-    try {
-      await fetch('/api/admin/auth', { method: 'DELETE' })
-      router.push('/admin/login')
-    } catch (error) {
-      router.push('/admin/login')
-    }
-  }
+  // Logout functionality removed - no session to logout from
+  // const handleLogout = async () => {
+  //   try {
+  //     await fetch('/api/admin/auth', { method: 'DELETE' })
+  //     router.push('/admin/login')
+  //   } catch (error) {
+  //     router.push('/admin/login')
+  //   }
+  // }
 
   const handleChangePassword = async (e) => {
     e.preventDefault()
@@ -293,13 +268,7 @@ export default function AdminDashboard() {
                 <KeyIcon className="h-4 w-4 mr-2" />
                 Change Password
               </button>
-              <button
-                onClick={handleLogout}
-                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 hover:cursor-pointer"
-              >
-                <ArrowRightOnRectangleIcon className="h-4 w-4 mr-2" />
-                Logout
-              </button>
+              {/* Logout button removed - no session to logout from */}
             </div>
           </div>
         </div>
