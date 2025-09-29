@@ -1,18 +1,12 @@
 import { NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
 import { adminQueries } from '@/lib/queries'
-import { verifyAdminSession } from '@/lib/admin-session'
+import { AdminSession } from '@/lib/admin-session'
 
 export async function POST(request) {
   try {
     // Verify admin session
-    const adminSession = await verifyAdminSession(request)
-    if (!adminSession.isValid) {
-      return NextResponse.json(
-        { error: 'Unauthorized - Invalid admin session' },
-        { status: 401 }
-      )
-    }
+    const adminSession = await AdminSession.verify(request)
 
     const { currentPassword, newPassword } = await request.json()
 
@@ -32,7 +26,7 @@ export async function POST(request) {
     }
 
     // Get current admin user
-    const adminUser = await adminQueries.findById(adminSession.adminId)
+    const adminUser = await adminQueries.findById(adminSession.id)
     if (!adminUser) {
       return NextResponse.json(
         { error: 'Admin user not found' },
@@ -69,6 +63,13 @@ export async function POST(request) {
     })
 
   } catch (error) {
+    if (error.message === 'Unauthorized') {
+      return NextResponse.json(
+        { error: 'Unauthorized - Invalid admin session' },
+        { status: 401 }
+      )
+    }
+
     console.error('Change password error:', error)
     return NextResponse.json(
       { error: 'Internal server error' },
