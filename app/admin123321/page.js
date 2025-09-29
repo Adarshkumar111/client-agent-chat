@@ -43,9 +43,9 @@ export default function AdminDashboard() {
     const fetchDashboardData = async () => {
       try {
         const [statsResponse, agentsResponse, usersResponse] = await Promise.all([
-          fetch('/api/admin/dashboard'),
-          fetch('/api/admin/users?role=AGENT&limit=100'),
-          fetch('/api/admin/users?role=USER&limit=100')
+          fetch('/api/admin123321/dashboard'),
+          fetch('/api/admin123321/users?role=AGENT&limit=100'),
+          fetch('/api/admin123321/users?role=USER&limit=100')
         ])
 
         if (statsResponse.ok) {
@@ -76,9 +76,9 @@ export default function AdminDashboard() {
   const fetchDashboardData = async () => {
     try {
       const [statsResponse, agentsResponse, usersResponse] = await Promise.all([
-        fetch('/api/admin/dashboard'),
-        fetch('/api/admin/users?role=AGENT&limit=100'),
-        fetch('/api/admin/users?role=USER&limit=100')
+        fetch('/api/admin123321/dashboard'),
+        fetch('/api/admin123321/users?role=AGENT&limit=100'),
+        fetch('/api/admin123321/users?role=USER&limit=100')
       ])
 
       if (statsResponse.ok) {
@@ -105,7 +105,7 @@ export default function AdminDashboard() {
 
   const handleUserStatusUpdate = async (userId, isActive) => {
     try {
-      const response = await fetch('/api/admin/users', {
+      const response = await fetch('/api/admin123321/users', {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -161,7 +161,7 @@ export default function AdminDashboard() {
     }
 
     try {
-      const response = await fetch('/api/admin/change-password', {
+      const response = await fetch('/api/admin123321/change-password', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -213,7 +213,7 @@ export default function AdminDashboard() {
     setDeleteConfirmModal(null)
 
     try {
-      const response = await fetch('/api/admin/users', {
+      const response = await fetch('/api/admin123321/users', {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
